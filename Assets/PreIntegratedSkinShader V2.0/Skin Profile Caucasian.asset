@@ -1,0 +1,85 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!28 &2800000
+Texture2D:
+  m_ObjectHideFlags: 9
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: referenceTexture
+  m_ImageContentsHash:
+    serializedVersion: 2
+    Hash: 5ff445b989689c1f4383b9ccdf5351eb
+  m_ForcedFallbackFormat: 4
+  m_DownscaleFallback: 0
+  serializedVersion: 2
+  m_Width: 1
+  m_Height: 1
+  m_CompleteImageSize: 4
+  m_TextureFormat: 5
+  m_MipCount: 1
+  m_IsReadable: 1
+  m_IgnoreMasterTextureLimit: 0
+  m_StreamingMipmaps: 0
+  m_StreamingMipmapsPriority: 0
+  m_AlphaIsTransparency: 0
+  m_ImageCount: 1
+  m_TextureDimension: 2
+  m_TextureSettings:
+    serializedVersion: 2
+    m_FilterMode: 1
+    m_Aniso: 1
+    m_MipBias: 0
+    m_WrapU: 0
+    m_WrapV: 0
+    m_WrapW: 0
+  m_LightmapFormat: 0
+  m_ColorSpace: 1
+  image data: 4
+  _typelessdata: cdcdcdcd
+  m_StreamData:
+    offset: 0
+    size: 0
+    path: 
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4f3302eab29861f4d9a917557f941471, type: 3}
+  m_Name: Skin Profile Caucasian
+  m_EditorClassIdentifier: 
+  gauss6_1: {x: 0.233, y: 0.455, z: 0.649, w: 0.0064}
+  gauss6_2: {x: 0.1, y: 0.336, z: 0.344, w: 0.0484}
+  gauss6_3: {x: 0.118, y: 0.198, z: 0.001, w: 0.187}
+  gauss6_4: {x: 0.113, y: 0.007, z: 0.007, w: 0.567}
+  gauss6_5: {x: 0.358, y: 0.004, z: 0.001, w: 1.99}
+  gauss6_6: {x: 0.078, y: 0.001, z: 0.001, w: 7.41}
+  _PSSProfileHigh_weighths1_var1: {x: 0.233, y: 0.45454544, z: 0.6470587, w: 0.0064}
+  _PSSProfileHigh_weighths2_var2: {x: 0.1, y: 0.3356643, z: 0.34297106, w: 0.0484}
+  _PSSProfileHigh_weighths3_var3: {x: 0.118, y: 0.19780219, z: 0.0009970089, w: 0.187}
+  _PSSProfileHigh_weighths4_var4: {x: 0.113, y: 0.006993007, z: 0.006979062, w: 0.567}
+  _PSSProfileHigh_weighths5_var5: {x: 0.358, y: 0.003996004, z: 0.0009970089, w: 1.99}
+  _PSSProfileHigh_weighths6_var6: {x: 0.078, y: 0.000999001, z: 0.0009970089, w: 7.41}
+  _PSSProfileHigh_sqrtvar1234: {x: 0.08, y: 0.22, z: 0.43243498, w: 0.752994}
+  _PSSProfileHigh_transl123_sqrtvar5: {x: -225.4211, y: -29.807749, z: -7.7149463,
+    w: 1.4106736}
+  _PSSProfileHigh_transl456_sqrtvar6: {x: -2.5444357, y: -0.72497237, z: -0.19469568,
+    w: 2.7221315}
+  _PSSProfileMedium_weighths1_var1: {x: 0.333, y: 0.7902098, z: 0.9900298, w: 0.02292179}
+  _PSSProfileMedium_weighths2_var2: {x: 0.231, y: 0.2047952, z: 0.007976071, w: 0.26429647}
+  _PSSProfileMedium_weighths3_var3: {x: 0.43600002, y: 0.0049950047, z: 0.0019940177,
+    w: 2.9651072}
+  _PSSProfileMedium_transl123: {x: -62.939896, y: -5.458624, z: -0.48655745, w: 0}
+  _PSSProfileMedium_sqrtvar123: {x: 0.15139943, y: 0.51409775, z: 1.7219486, w: 0}
+  _PSSProfileLow_weighths1_var1: {x: 0.451, y: 0.98801196, z: 0.9910268, w: 0.052952096}
+  _PSSProfileLow_weighths2_var2: {x: 0.549, y: 0.011988012, z: 0.00897308, w: 2.426368}
+  _PSSProfileLow_sqrtvar12: {x: 0.23011322, y: 1.5576804, z: 0, w: 0}
+  _PSSProfileLow_transl: {x: -1.0432628, y: -19.117676, z: -42.11458, w: 0}
+  needsRenormalize: 1
+  needsRecalcDerived: 0
+  referenceTexture: {fileID: 2800000}
