@@ -185,7 +185,7 @@ namespace JBrothers.PreIntegratedSkinShader2.Demo {
 
 					profile.ApplyProfile(profileSphereMaterial);
 					
-					Graphics.DrawTexture(r, Texture2D.whiteTexture, profileSphereMaterial);
+					Graphics.DrawTexture(r, Texture2D.whiteTexture, profileSphereMaterial); // 用 ProfilePreview Shader 渲染这个Texture
 				}
 
 				if (mouseHovers)

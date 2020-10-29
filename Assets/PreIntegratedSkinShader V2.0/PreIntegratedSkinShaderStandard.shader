@@ -119,33 +119,7 @@ Shader "Skin/PreIntegratedSkinShaderV2.0_Standard" {
 				#define PSS_ENABLE_TRANSLUCENCY 1
 				#define PSS_PERPIXELLIGHTPROBES_ON 1
 				#define PSS_REFLECTION_PROBES_ON 1
-			#elif SHADER_TARGET >= 25
-				#define PSS_QUALITY PSS_QUALITY_MEDIUM
-
-				#define PSS_ENABLE_MASK 1
-				#define PSS_AMBIENT_OCCLUSION_ON 1
-				#define PSS_AMBIENT_OCCLUSION_DIRECTIONAL 1
-				
-				#define PSS_BLURRED_SAMPLING_ON 1
-				#define PSS_ENABLE_TRANSLUCENCY 1
-				#define PSS_PERPIXELLIGHTPROBES_ON 1
-				#define PSS_REFLECTION_PROBES_ON 1
-			#else
-				// When it gets compiled to shader model 2, on Direct3D need to fit into mere
-				// 64 instructions, so need to cut on something! :(
-				// On OpenGLES2.0, let's take on the risk and try emiting a longer glsl shader
-				// anyway, so we get at least fundamental features features.
-				// As of writing Unity 5.4 is in beta and Android builds crash on my phone, so
-				// I'm not yet sure what'll happen. I suspect it will use SM2.5, so we get the
-				// goodies, as long as the opengl es driver handles the larger instruction count,
-				// otherwise... will it fallback? I guess it won't and the mesh will render
-				// transparent with shadows only. If that's the case we can test for SHADER_API_MOBILE
-				// and get the goodies on webgl and limit on mobile, maybe. Or just let SM2 be ugly
-				// and don't use 2.5 at all.
-				// Also specular is enabled only on main directional light, see the subshaders.
-				// I know, this sux. Standard shader manages to do specular, but either specular
-				// or SSS.
-				#define PSS_QUALITY PSS_QUALITY_LOW
+			
 			#endif
 
 			
@@ -213,7 +187,7 @@ Shader "Skin/PreIntegratedSkinShaderV2.0_Standard" {
 				float2 uv = i.uv.xy;
 				
 				fixed mask = tex2D(_SkinMask, uv).r; // this was originally multiplied by _Color.a, but I removed it to reduce instruction count
-				blur = lerp(0.0, blur, mask);
+				blur = lerp(0.0, blur, mask);                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   
 
 				float bumpinesBiasMin = _BlurRange.x;
 				float bumpinesBiasMax = _BlurRange.y;
@@ -287,19 +261,6 @@ Shader "Skin/PreIntegratedSkinShaderV2.0_Standard" {
 				
 				CGPROGRAM
 					#pragma target 3.0
-
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
 					#pragma vertex pss_vert
 		            #pragma fragment pss_frag
 					
@@ -323,20 +284,7 @@ Shader "Skin/PreIntegratedSkinShaderV2.0_Standard" {
 				CGPROGRAM
 					#pragma target 3.0
 					
-					//#pragma fragmentoption ARB_precision_hint_fastest
-					
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
+
 					#pragma vertex pss_vert
 		            #pragma fragment pss_frag
 					
@@ -351,202 +299,14 @@ Shader "Skin/PreIntegratedSkinShaderV2.0_Standard" {
 			}
 		} // SubShader-SM3.0
 
-		SubShader {
-			Tags { "RenderType"="Opaque" }
-			LOD 400
-			
-			Pass {
-				Name "FORWARD"
-				Tags { "LightMode"="ForwardBase" }
-				Blend Off
-				ZWrite On
-				ZTest LEqual 
-				
-				CGPROGRAM
-					#pragma target 2.5
-
-					// Exclude consoles because they surely don't need the fallback
-					// and it's only creating problems.
-					// For now I'm listing consoles that are SM3 capable to my knowledge.
-					#pragma exclude_renderers ps3 ps4 xbox360 xboxone wiiu
-
-					//#pragma fragmentoption ARB_precision_hint_fastest
-
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
-					#pragma vertex pss_vert
-		            #pragma fragment pss_frag
-					
-					#pragma multi_compile_fwdbase nolightmap nodirlightmap
-					#pragma multi_compile_fog
-					#pragma skip_variants DYNAMICLIGHTMAP_ON LIGHTMAP_ON
-					
-					#define UNITY_PASS_FORWARDBASE
-
-					#include "./PreIntegratedSkinShaderCore.cginc"
-				ENDCG
-			}
-			
-			Pass {
-				Name "FORWARD"
-				Tags { "LightMode" = "ForwardAdd" }
-				ZWrite Off
-				ZTest LEqual 
-				Blend One One
-				
-				CGPROGRAM
-					#pragma target 2.5
-
-					// Exclude consoles because they surely don't need the fallback
-					// and it's only creating problems.
-					// For now I'm listing consoles that are SM3 capable to my knowledge.
-					#pragma exclude_renderers ps3 ps4 xbox360 xboxone wiiu
-
-					//#pragma fragmentoption ARB_precision_hint_fastest
-					
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
-					#pragma vertex pss_vert
-		            #pragma fragment pss_frag
-					
-					#pragma multi_compile_fwdadd_fullshadows nolightmap nodirlightmap
-					#pragma multi_compile_fog
-					#pragma skip_variants DYNAMICLIGHTMAP_ON LIGHTMAP_ON
-	
-					#define UNITY_PASS_FORWARDADD
-
-					#if SHADER_TARGET <= 20 && defined(UNITY_PASS_FORWARDADD) && (defined(SHADER_API_D3D11_9X) || defined(SHADER_API_D3D9))
-						#undef PSS_ENABLE_SPECULAR
-					#endif
-
-					#include "./PreIntegratedSkinShaderCore.cginc"
-				ENDCG
-			}
-		} // SubShader-SM2.5
-
-		SubShader {
-			Tags { "RenderType"="Opaque" }
-			LOD 300
-			
-			Pass {
-				Name "FORWARD"
-				Tags { "LightMode"="ForwardBase" }
-				Blend Off
-				ZWrite On
-				ZTest LEqual 
-				
-				CGPROGRAM
-					#pragma target 2.0
-
-					// Exclude consoles because they surely don't need the fallback
-					// and it's only creating problems.
-					// For now I'm listing consoles that are SM3 capable to my knowledge.
-					#pragma exclude_renderers ps3 ps4 xbox360 xboxone wiiu
-
-					//#pragma fragmentoption ARB_precision_hint_fastest
-
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
-					#pragma vertex pss_vert
-		            #pragma fragment pss_frag
-					
-					#pragma multi_compile_fwdbase nolightmap nodirlightmap
-					#pragma multi_compile_fog
-					#pragma skip_variants DYNAMICLIGHTMAP_ON LIGHTMAP_ON
-					
-					#define UNITY_PASS_FORWARDBASE
-
-					#include "./PreIntegratedSkinShaderCore.cginc"
-				ENDCG
-			}
-			
-			Pass {
-				Name "FORWARD"
-				Tags { "LightMode" = "ForwardAdd" }
-				ZWrite Off
-				ZTest LEqual 
-				Blend One One
-				
-				CGPROGRAM
-					#pragma target 2.0
-
-					// Exclude consoles because they surely don't need the fallback
-					// and it's only creating problems.
-					// For now I'm listing consoles that are SM3 capable to my knowledge.
-					#pragma exclude_renderers ps3 ps4 xbox360 xboxone wiiu
-					
-					//#pragma fragmentoption ARB_precision_hint_fastest
-					
-					// Exclude flash target, let it fall back to a low quality version.
-					// Probably no one is targeting flash anymore as it's deprecated.
-					#pragma exclude_renderers flash
-					
-					// On OpenGL platforms make CG compile to GLSL instead of archaic
-					// ARB assembly shaders, which don't support sampling textures with
-					// mip map level bias.
-					// Hopefully there's aren't many devices/drivers around not supporting
-					// it. If there are some, it's probably better to fall back to a dumb
-					// shader anyway.
-					#pragma glsl
-					
-					#pragma vertex pss_vert
-		            #pragma fragment pss_frag
-					
-					#pragma multi_compile_fwdadd_fullshadows nolightmap nodirlightmap
-					#pragma multi_compile_fog
-					#pragma skip_variants DYNAMICLIGHTMAP_ON LIGHTMAP_ON
-	
-					#define UNITY_PASS_FORWARDADD
-
-					#if SHADER_TARGET <= 20 && defined(UNITY_PASS_FORWARDADD) && (defined(SHADER_API_D3D11_9X) || defined(SHADER_API_D3D9))
-						#undef PSS_ENABLE_SPECULAR
-					#endif
-
-					#include "./PreIntegratedSkinShaderCore.cginc"
-				ENDCG
-			}
-		} // SubShader-SM2.0
-
 	} // Category
+		
 	
-	// NB: no meta pass. Skin shader should not be applied to static objects.
-
-	// Shadow pass.
-	SubShader { UsePass "VertexLit/SHADOWCASTER" }
+	// SubShader { UsePass "VertexLit/SHADOWCASTER" }
 	
-	// Shadow collector pass for Unity 3/4.
-	// For Unity 5 it's not needed anymore and in fact not present in VertexLit so this subshader gets discarded entirely.
-	SubShader { UsePass "VertexLit/SHADOWCOLLECTOR" }
+	
+	
+	// SubShader { UsePass "VertexLit/SHADOWCOLLECTOR" }
 	
 	FallBack "VertexLit"
 }
