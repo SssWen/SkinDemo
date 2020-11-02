@@ -265,7 +265,7 @@ Material:
     - _WorldScale: 1
     m_Colors:
     - _BackScatterTintColor: {r: 1, g: 1, b: 1, a: 1}
-    - _BlurRange: {r: 0, g: 0.95543206, b: 0, a: 0}
+    - _BlurRange: {r: 0, g: 0.9554318, b: 0, a: 0}
     - _BumpinessBias: {r: 0, g: 0.9241908, b: 0, a: 0}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
     - _Emission: {r: 0, g: 0, b: 0, a: 0}
